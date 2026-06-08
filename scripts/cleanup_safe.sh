@@ -22,9 +22,9 @@ crontab -l > "$BACKUP" 2>/dev/null || echo "No crontab found"
 TMP_CRON="/tmp/crontab_tmp_${TIMESTAMP}.txt"
 
 crontab -l | sed \
-  -e 's|^\(\s*\*\s*/1\s\*\s*\).*free-claude-code-watchdog.*|# DISABLED SAFE: \1 free-claude-code-watchdog|' \
-  -e 's|^\(\s*\*\s*/1\s\*\s*\).*openclaw-gateway-watchdog.*|# DISABLED SAFE: \1 openclaw-gateway-watchdog|' \
-  -e 's|^\(\s*\*\s*/1\s\*\s*\).*imperio_operator_gateway.*|# DISABLED SAFE: \1 imperio_operator_gateway|' \
+  -e '/free-claude-code-watchdog/s/^/# DISABLED SAFE: /' \
+  -e '/openclaw-gateway-watchdog/s/^/# DISABLED SAFE: /' \
+  -e '/imperio_operator_gateway/s/^/# DISABLED SAFE: /' \
   > "$TMP_CRON" || true
 
 crontab "$TMP_CRON" || true
