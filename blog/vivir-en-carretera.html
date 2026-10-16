@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Vivir en carretera: comparativa de costos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Archivo+Narrow:wght@500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg: #f2f4f1;
+        --surface: #ffffff;
+        --surface-2: #e8ede7;
+        --ink: #1b2420;
+        --ink-soft: #48544d;
+        --line: #d3dbd2;
+        --pine: #1e5c43;
+        --pine-ink: #ffffff;
+        --pine-soft: #dcebe2;
+        --rust: #b4501d;
+        --amber: #c07f13;
+        --danger: #a02c22;
+        --shadow: 0 10px 30px rgba(20, 35, 28, 0.10);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #101613;
+          --surface: #1a211d;
+          --surface-2: #232c27;
+          --ink: #e9efea;
+          --ink-soft: #a7b3aa;
+          --line: #333f37;
+          --pine: #3d9c72;
+          --pine-ink: #0d1512;
+          --pine-soft: #22362c;
+          --rust: #e07f4a;
+          --amber: #e0aa4e;
+          --danger: #e0685c;
+          --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+        }
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: "Archivo", system-ui, sans-serif;
+        font-size: 17px;
+        line-height: 1.55;
+      }
+      img { max-width: 100%; display: block; }
+      a { color: var(--pine); }
+      .wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+
+      /* ---------- Hero ---------- */
+      .hero { position: relative; min-height: 62vh; display: flex; align-items: flex-end; }
+      .hero img.bg {
+        position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+      }
+      .hero::after {
+        content: ""; position: absolute; inset: 0;
+        background: linear-gradient(to top, rgba(8, 18, 13, 0.88) 0%, rgba(8, 18, 13, 0.45) 45%, rgba(8, 18, 13, 0.05) 75%);
+      }
+      .hero-content { position: relative; z-index: 1; color: #f2f6f2; padding: 90px 0 34px; width: 100%; }
+      .hero h1 {
+        font-size: clamp(30px, 5.4vw, 52px); line-height: 1.08; font-weight: 900;
+        letter-spacing: -0.015em; margin: 0 0 14px; max-width: 19ch;
+      }
+      .hero p.lead { font-size: clamp(16px, 2.4vw, 20px); max-width: 56ch; margin: 0; color: #d9e4da; }
+      .verdict-strip {
+        margin-top: 26px; display: flex; flex-wrap: wrap; gap: 12px; align-items: stretch;
+      }
+      .verdict-main {
+        background: var(--pine); color: #fff; border-radius: 14px; padding: 16px 20px;
+        display: flex; align-items: center; gap: 16px; box-shadow: var(--shadow);
+      }
+      .verdict-main .big { font-size: 40px; font-weight: 900; line-height: 1; white-space: nowrap; }
+      .verdict-main .lbl { font-size: 15px; line-height: 1.35; max-width: 26ch; }
+      .verdict-main .lbl strong { display: block; font-size: 17px; }
+      .verdict-note {
+        background: rgba(10, 22, 16, 0.72); border: 1px solid rgba(255,255,255,0.22);
+        border-radius: 14px; padding: 14px 18px; font-size: 14.5px; color: #d9e4da;
+        display: flex; align-items: center; max-width: 420px;
+      }
+
+      /* ---------- Sections ---------- */
+      section { padding: 54px 0 8px; }
+      h2 { font-size: clamp(24px, 3.6vw, 34px); font-weight: 800; letter-spacing: -0.01em; margin: 0 0 8px; line-height: 1.15; }
+      .sub { color: var(--ink-soft); max-width: 68ch; margin: 0 0 26px; }
+      .rule { height: 3px; width: 56px; background: var(--rust); border-radius: 2px; margin-bottom: 16px; }
+
+      /* ---------- Chart ---------- */
+      .chart-card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 22px 22px 12px; box-shadow: var(--shadow); }
+      .chart-card svg { width: 100%; height: auto; }
+      .chart-note { font-size: 13.5px; color: var(--ink-soft); margin: 6px 2px 10px; }
+
+      /* ---------- Cards ---------- */
+      .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+      .card {
+        background: var(--surface); border: 1px solid var(--line); border-radius: 16px;
+        overflow: hidden; box-shadow: var(--shadow); display: flex; flex-direction: column;
+      }
+      .card.winner { border: 2px solid var(--pine); }
+      .card figure { margin: 0; position: relative; }
+      .card figure img { width: 100%; height: 190px; object-fit: cover; }
+      .card figure.white img { object-fit: contain; background: #fff; padding: 6px; }
+      .rank {
+        position: absolute; top: 12px; left: 12px; background: rgba(10, 20, 15, 0.82); color: #fff;
+        font-family: "Archivo Narrow", sans-serif; font-weight: 700; font-size: 14px;
+        padding: 5px 11px; border-radius: 999px; letter-spacing: 0.04em;
+      }
+      .rank.first { background: var(--pine); }
+      .card-body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+      .card h3 { margin: 0; font-size: 21px; font-weight: 800; }
+      .card .aka { color: var(--ink-soft); font-size: 14px; margin-top: -8px; }
+      .monthly { display: flex; align-items: baseline; gap: 8px; }
+      .monthly .amt { font-size: 34px; font-weight: 900; color: var(--pine); line-height: 1; }
+      .card.winner .monthly .amt { color: var(--pine); }
+      .monthly .per { color: var(--ink-soft); font-size: 14px; }
+      .specs { margin: 0; padding: 0; list-style: none; font-size: 15px; }
+      .specs li { display: flex; justify-content: space-between; gap: 12px; padding: 6px 0; border-top: 1px dashed var(--line); }
+      .specs li span:first-child { color: var(--ink-soft); }
+      .specs li span:last-child { font-weight: 600; text-align: right; }
+      .card .note { font-size: 14.5px; color: var(--ink-soft); margin: 0; margin-top: auto; }
+      .card .note strong { color: var(--ink); }
+
+      /* ---------- Two-col features ---------- */
+      .split { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+      @media (max-width: 760px) { .split { grid-template-columns: 1fr; } }
+      .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 22px; box-shadow: var(--shadow); }
+      .panel h3 { margin: 0 0 10px; font-size: 19px; font-weight: 800; }
+      .panel p { margin: 0 0 10px; }
+      .panel p:last-child { margin-bottom: 0; }
+      .panel ul { margin: 0; padding-left: 20px; }
+      .panel li { margin-bottom: 6px; }
+      .panel img { border-radius: 10px; margin-bottom: 16px; width: 100%; height: 210px; object-fit: cover; }
+      .tag {
+        display: inline-block; font-family: "Archivo Narrow", sans-serif; font-weight: 700;
+        font-size: 13px; letter-spacing: 0.05em; text-transform: uppercase;
+        background: var(--pine-soft); color: var(--pine); border-radius: 6px; padding: 3px 9px; margin-bottom: 10px;
+      }
+      .tag.warn { background: rgba(176, 80, 29, 0.14); color: var(--rust); }
+      .big-num { font-size: 30px; font-weight: 900; line-height: 1.1; }
+
+      .spots { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; }
+      .spot { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
+      .spot h3 { margin: 0 0 4px; font-size: 17px; font-weight: 800; }
+      .spot .limit { font-family: "Archivo Narrow", sans-serif; font-weight: 700; color: var(--rust); font-size: 15px; letter-spacing: 0.03em; }
+      .spot p { margin: 8px 0 0; font-size: 14.5px; color: var(--ink-soft); }
+
+      /* ---------- Hidden costs ---------- */
+      .hidden-list { columns: 2; column-gap: 34px; margin: 0; padding-left: 22px; }
+      @media (max-width: 760px) { .hidden-list { columns: 1; } }
+      .hidden-list li { margin-bottom: 12px; break-inside: avoid; }
+      .hidden-list strong { color: var(--ink); }
+
+      /* ---------- Calculator ---------- */
+      .calc { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 24px; box-shadow: var(--shadow); }
+      .calc-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 28px; }
+      @media (max-width: 760px) { .calc-grid { grid-template-columns: 1fr; } }
+      .opt-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+      .opt-btn {
+        font-family: inherit; font-size: 14.5px; font-weight: 600; cursor: pointer;
+        border: 1.5px solid var(--line); background: var(--surface-2); color: var(--ink);
+        border-radius: 999px; padding: 8px 14px;
+      }
+      .opt-btn[aria-pressed="true"] { background: var(--pine); border-color: var(--pine); color: var(--pine-ink); }
+      .calc label { display: block; font-weight: 600; font-size: 15px; margin-bottom: 6px; }
+      .calc input[type="range"] { width: 100%; accent-color: var(--pine); }
+      .km-out { font-weight: 800; }
+      .toggle { display: flex; align-items: center; gap: 10px; margin-top: 18px; font-weight: 600; font-size: 15px; cursor: pointer; }
+      .toggle input { width: 20px; height: 20px; accent-color: var(--rust); }
+      .calc-result { background: var(--surface-2); border-radius: 12px; padding: 18px 20px; }
+      .calc-result .total { font-size: 42px; font-weight: 900; line-height: 1; color: var(--pine); }
+      .calc-result ul { list-style: none; margin: 14px 0 0; padding: 0; font-size: 14.5px; }
+      .calc-result li { display: flex; justify-content: space-between; padding: 4px 0; border-top: 1px dashed var(--line); }
+      .calc-result li span:first-child { color: var(--ink-soft); }
+
+      /* ---------- Sources / footer ---------- */
+      .caveats { background: var(--surface-2); border-radius: 14px; padding: 20px 22px; font-size: 14.5px; }
+      .caveats ul { margin: 8px 0 0; padding-left: 20px; }
+      .caveats li { margin-bottom: 6px; }
+      .sources { font-size: 14px; color: var(--ink-soft); }
+      .sources li { margin-bottom: 5px; word-break: break-word; }
+      footer { padding: 40px 0 54px; color: var(--ink-soft); font-size: 14px; }
+    </style>
+  </head>
+  <body>
+    <header class="hero">
+      <img class="bg" src="assets/img1.jpg" alt="Motorhome compacto estacionado junto a un lago rodeado de montañas" />
+      <div class="hero-content wrap">
+        <h1>Vivir en carretera: ¿qué modalidad gasta menos?</h1>
+        <p class="lead">Comparativa de costos reales en Canadá (Ontario) para vivir a tiempo completo sobre ruedas: camper van, motorhomes, tráiler, camper de camioneta y quinta rueda — con pernocta gratis y energía solar.</p>
+        <div class="verdict-strip">
+          <div class="verdict-main">
+            <div class="big">~$585</div>
+            <div class="lbl"><strong>La ganadora: camper van Clase B</strong>CAD al mes, todo incluido, con pernocta gratis y solar</div>
+          </div>
+          <div class="verdict-note">Modelo: vehículo pagado al contado, ~800 km/mes, estacionamiento $0 rotando sitios gratuitos, electricidad $0 con paneles solares. Sin comida (cuesta lo mismo que en un departamento).</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <section id="ranking">
+        <div class="rule"></div>
+        <h2>El ranking, de más barata a más cara</h2>
+        <p class="sub">La Clase B gana en casi todo: es la que menos gasolina quema, la más barata de asegurar y mantener, y la más discreta para dormir gratis cerca de los pueblos. La sorpresa: el motorhome Clase A es el más barato de <em>comprar</em>… y el más caro de <em>mantener rodando</em>.</p>
+        <div class="chart-card">
+          <svg viewBox="0 0 720 296" role="img" aria-label="Gráfico de barras: costo mensual estimado en dólares canadienses por modalidad">
+            <!-- scale: max 1125 -> 400px, bars start x=195 -->
+            <g font-family="Archivo, sans-serif" font-size="14">
+              <text x="187" y="30" text-anchor="end" font-weight="700" fill="currentColor">Camper van (Clase B)</text>
+              <rect x="195" y="14" width="208" height="24" rx="5" fill="#1e5c43"></rect>
+              <text x="411" y="31" font-weight="800" fill="currentColor">~$585</text>
+
+              <text x="187" y="80" text-anchor="end" font-weight="600" fill="currentColor">Camper de camioneta</text>
+              <rect x="195" y="64" width="260" height="24" rx="5" fill="#7a8a80"></rect>
+              <text x="463" y="81" font-weight="700" fill="currentColor">~$730</text>
+
+              <text x="187" y="130" text-anchor="end" font-weight="600" fill="currentColor">Motorhome Clase C</text>
+              <rect x="195" y="114" width="276" height="24" rx="5" fill="#7a8a80"></rect>
+              <text x="479" y="131" font-weight="700" fill="currentColor">~$775</text>
+
+              <text x="187" y="180" text-anchor="end" font-weight="600" fill="currentColor">Tráiler de viaje</text>
+              <rect x="195" y="164" width="284" height="24" rx="5" fill="#7a8a80"></rect>
+              <text x="487" y="181" font-weight="700" fill="currentColor">~$800</text>
+
+              <text x="187" y="230" text-anchor="end" font-weight="600" fill="currentColor">Motorhome Clase A</text>
+              <rect x="195" y="214" width="364" height="24" rx="5" fill="#b4501d"></rect>
+              <text x="567" y="231" font-weight="700" fill="currentColor">~$1.025</text>
+
+              <text x="187" y="280" text-anchor="end" font-weight="600" fill="currentColor">Quinta rueda</text>
+              <rect x="195" y="264" width="400" height="24" rx="5" fill="#b4501d"></rect>
+              <text x="603" y="281" font-weight="700" fill="currentColor">~$1.125</text>
+            </g>
+          </svg>
+          <p class="chart-note">El desglose de cada total: gasolina + seguro + fondo de mantención + propano ($40) + teléfono/internet ($60) + lavandería, descarga de tanques y agua ($40). Precios de combustible en Ontario, 16-oct-2026: gasolina ~$1,75/L, diésel ~$2,60/L.</p>
+        </div>
+      </section>
+
+      <section id="modalidades">
+        <div class="rule"></div>
+        <h2>Las seis modalidades, una por una</h2>
+        <p class="sub">Precios de compra: mercado usado canadiense, unidades económicas pero listas para rodar. Donde la modalidad es un remolque, el costo del vehículo que lo mueve está incluido en el gasto mensual — ahí está la trampa que casi nadie cuenta.</p>
+        <div class="grid">
+
+          <article class="card winner">
+            <figure>
+              <img src="assets/img2.jpg" alt="Camper van Clase B blanca con la puerta lateral abierta mostrando la cocina" />
+              <span class="rank first">1 · LA MÁS BARATA</span>
+            </figure>
+            <div class="card-body">
+              <h3>Camper van — Clase B</h3>
+              <p class="aka">Una van convertida en casa: todo en un solo vehículo.</p>
+              <div class="monthly"><span class="amt">~$585</span><span class="per">CAD / mes</span></div>
+              <ul class="specs">
+                <li><span>Compra (usada)</span><span>$8.000–$15.000</span></li>
+                <li><span>Gasolina</span><span>~14 L/100 km · $196/mes</span></li>
+                <li><span>Seguro (Ontario)</span><span>~$100/mes</span></li>
+                <li><span>Fondo de mantención</span><span>~$150/mes</span></li>
+              </ul>
+              <p class="note"><strong>Por qué gana:</strong> un solo vehículo que asegurar, mantener y estacionar. Es la que menos quema (12–17 L/100 km; las diésel bajan a ~9–10) y la más «invisible» para dormir gratis cerca de pueblos.</p>
+            </div>
+          </article>
+
+          <article class="card">
+            <figure>
+              <img src="assets/img3.jpg" alt="Camper montado sobre la caja de una camioneta pickup frente a montañas nevadas" />
+              <span class="rank">2</span>
+            </figure>
+            <div class="card-body">
+              <h3>Camper de camioneta</h3>
+              <p class="aka">Una cabina que se monta en la caja de una pickup.</p>
+              <div class="monthly"><span class="amt">~$730</span><span class="per">CAD / mes</span></div>
+              <ul class="specs">
+                <li><span>Compra (usado)</span><span>$2.000–$12.000 + la camioneta</span></li>
+                <li><span>Gasolina</span><span>~18 L/100 km · $252/mes</span></li>
+                <li><span>Seguro (Ontario)</span><span>~$175/mes</span></li>
+                <li><span>Fondo de mantención</span><span>~$165/mes</span></li>
+              </ul>
+              <p class="note"><strong>El detalle:</strong> el seguro suma la camioneta ($150) + el camper ($25). <strong>Si ya tienes una pickup adecuada, esta puede ser la mejor compra de todas</strong>: barata, habitable y llega a cualquier parte.</p>
+            </div>
+          </article>
+
+          <article class="card">
+            <figure>
+              <img src="assets/img4.jpg" alt="Motorhome Clase C blanco circulando por una carretera con montañas al fondo" />
+              <span class="rank">3</span>
+            </figure>
+            <div class="card-body">
+              <h3>Motorhome — Clase C</h3>
+              <p class="aka">El clásico con litera sobre la cabina.</p>
+              <div class="monthly"><span class="amt">~$775</span><span class="per">CAD / mes</span></div>
+              <ul class="specs">
+                <li><span>Compra (usado)</span><span>$8.000–$18.000</span></li>
+                <li><span>Gasolina</span><span>~22 L/100 km · $308/mes</span></li>
+                <li><span>Seguro (Ontario)</span><span>~$125/mes</span></li>
+                <li><span>Fondo de mantención</span><span>~$200/mes</span></li>
+              </ul>
+              <p class="note">Más espacio y baño más cómodo que la van, todo en un solo vehículo. A cambio quema bastante más (los dueños reportan 18–26 L/100 km reales) y su mantención cuesta más.</p>
+            </div>
+          </article>
+
+          <article class="card">
+            <figure>
+              <img src="assets/img5.jpg" alt="Tráiler de viaje instalado en un sitio boscoso con el toldo extendido" />
+              <span class="rank">4</span>
+            </figure>
+            <div class="card-body">
+              <h3>Tráiler de viaje</h3>
+              <p class="aka">Remolque que se arrastra con camioneta o SUV.</p>
+              <div class="monthly"><span class="amt">~$800</span><span class="per">CAD / mes</span></div>
+              <ul class="specs">
+                <li><span>Compra (usado)</span><span>$4.000–$12.000 + vehículo remolcador</span></li>
+                <li><span>Gasolina remolcando</span><span>~20 L/100 km · $280/mes</span></li>
+                <li><span>Seguro (Ontario)</span><span>~$183/mes</span></li>
+                <li><span>Fondo de mantención</span><span>~$200/mes</span></li>
+              </ul>
+              <p class="note"><strong>La trampa:</strong> el tráiler solo parece barato. El seguro suma el tráiler ($33) + el vehículo ($150), y un vehículo remolcador usado decente en Ontario cuesta otros $8.000–$15.000 o más. <strong>Dos vehículos = dos gastos.</strong></p>
+            </div>
+          </article>
+
+          <article class="card">
+            <figure>
+              <img src="assets/img6.jpg" alt="Motorhome Clase A grande, estilo bus, estacionado en un patio" />
+              <span class="rank">5</span>
+            </figure>
+            <div class="card-body">
+              <h3>Motorhome — Clase A</h3>
+              <p class="aka">El «bus»: el más grande y espacioso.</p>
+              <div class="monthly"><span class="amt">~$1.025</span><span class="per">CAD / mes</span></div>
+              <ul class="specs">
+                <li><span>Compra (usado)</span><span>$3.000–$15.000</span></li>
+                <li><span>Gasolina</span><span>~30 L/100 km · $420/mes</span></li>
+                <li><span>Seguro (Ontario)</span><span>~$165/mes</span></li>
+                <li><span>Fondo de mantención</span><span>~$300/mes</span></li>
+              </ul>
+              <p class="note"><strong>La paradoja:</strong> es el más barato de comprar (los de gasolina de los 90 bajan a $3.000–$5.000) y el más caro de operar. Un juego de llantas puede costar $6.000–$7.000. Barato al entrar, caro al quedarse.</p>
+            </div>
+          </article>
+
+          <article class="card">
+            <figure class="white">
+              <img src="assets/img7.jpg" alt="Tráiler quinta rueda blanco con el enganche elevado sobre la caja de la camioneta" />
+              <span class="rank">6 · LA MÁS CARA</span>
+            </figure>
+            <div class="card-body">
+              <h3>Quinta rueda</h3>
+              <p class="aka">Remolque grande que se engancha en la caja de una pickup ¾ de tonelada.</p>
+              <div class="monthly"><span class="amt">~$1.125</span><span class="per">CAD / mes</span></div>
+              <ul class="specs">
+                <li><span>Compra (usada)</span><span>$3.000–$10.000 + camioneta ¾ ton + enganche</span></li>
+                <li><span>Diésel remolcando</span><span>~24 L/100 km · $500/mes</span></li>
+                <li><span>Seguro (Ontario)</span><span>~$233/mes</span></li>
+                <li><span>Fondo de mantención</span><span>~$250/mes</span></li>
+              </ul>
+              <p class="note">La más cómoda para vivir… y la más cara cada mes: exige la camioneta más grande, quema diésel a ~$2,60/L y el seguro es el más alto de la tabla ($50 del remolque + $183 de la camioneta).</p>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <section id="calculadora">
+        <div class="rule"></div>
+        <h2>Calculadora: ¿cuánto gastarías tú?</h2>
+        <p class="sub">Mueve los kilómetros y activa el invierno para ver cómo cambia el gasto mensual de cada modalidad, usando el mismo modelo de la comparativa.</p>
+        <div class="calc">
+          <div class="calc-grid">
+            <div>
+              <label>Modalidad</label>
+              <div class="opt-row" id="optRow"></div>
+              <label for="km">Kilómetros al mes: <span class="km-out" id="kmOut">800 km</span></label>
+              <input type="range" id="km" min="0" max="3000" step="100" value="800" />
+              <label class="toggle"><input type="checkbox" id="winter" /> Invierno en Ontario (dic–feb: +$400–$600/mes)</label>
+            </div>
+            <div class="calc-result">
+              <div class="total" id="calcTotal">~$585</div>
+              <div style="font-size:14px;color:var(--ink-soft)">CAD al mes · <span id="calcName">Camper van (Clase B)</span></div>
+              <ul id="calcLines"></ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="dormir-gratis">
+        <div class="rule"></div>
+        <h2>Dormir gratis: ¿se puede pagar $0 de estacionamiento?</h2>
+        <p class="sub">Sí, rotando sitios — pero con reglas y límites claros. En Ontario funciona bien de mayo a octubre; cerca del GTA el terreno legal escasea y la mayoría de los pueblos del sur prohíben pernoctar en la calle.</p>
+        <div class="spots">
+          <div class="spot">
+            <h3>Tierras de la Corona (Ontario)</h3>
+            <div class="limit">GRATIS · MÁX. 21 DÍAS POR SITIO</div>
+            <p>Los residentes de Canadá acampan gratis hasta 21 días en un mismo sitio por año calendario; después hay que mover el campamento al menos 100 m. ~87% de Ontario es tierra de la Corona, pero está concentrada en el norte (a 2+ horas del GTA). Confirma cada sitio en el Crown Land Use Policy Atlas del MNRF.</p>
+          </div>
+          <div class="spot">
+            <h3>Tierras BLM (EE. UU.)</h3>
+            <div class="limit">GRATIS · 14 DÍAS CADA 28</div>
+            <p>Acampada dispersa gratuita en terrenos públicos federales: 14 días dentro de cualquier período de 28, y luego moverse (normalmente 40–50 km). Sin permiso ni reserva. Es la gran ventaja de los «snowbirds» en invierno.</p>
+          </div>
+          <div class="spot">
+            <h3>Walmart</h3>
+            <div class="limit">1 NOCHE · SEGÚN LA TIENDA</div>
+            <p>La política general permite una noche gratis, pero depende de cada tienda: cerca de ¼ ya no lo permite. Llama antes. Es un estacionamiento, no un camping: sin sillas, sin toldo, sin parrilla.</p>
+          </div>
+          <div class="spot">
+            <h3>iOverlander y otras apps</h3>
+            <div class="limit">GRATIS (NIVEL BÁSICO)</div>
+            <p>Pines GPS de la comunidad con sitios de pernocta, agua y puntos de descarga, con mapas sin conexión. Revisa que las reseñas sean recientes. También sirven FreeCampsites.net y Campendium.</p>
+          </div>
+        </div>
+        <p class="sub" style="margin-top:20px">Ojo: «gratis» no es del todo gratis — manejar 2+ horas hasta la tierra de la Corona quema gasolina, y la lavandería, el agua y la descarga de tanques suman unos $40/mes como mínimo (ya incluidos en la comparativa).</p>
+      </section>
+
+      <section id="solar">
+        <div class="rule"></div>
+        <h2>Energía propia: solar sí, y sale barato</h2>
+        <p class="sub">Un kit solar básico elimina el gasto en electricidad para las cargas normales de la vida en un RV, durante tres estaciones del año.</p>
+        <div class="split">
+          <div class="panel">
+            <img src="assets/img8.jpg" alt="Paneles solares instalados en el techo de un RV en un camping" />
+            <span class="tag">Kit completo 400 W</span>
+            <div class="big-num">~$1.030 CAD</div>
+            <p>Kit ECO-WORTHY en Amazon.ca: 4 paneles de 100 W + controlador MPPT de 40 A + batería LiFePO4 de 100 Ah + inversor de onda pura de 1.100 W. Armándolo por piezas, el rango realista «hazlo tú mismo» es <strong>$800–$1.300 CAD</strong> (pago único).</p>
+          </div>
+          <div class="panel">
+            <span class="tag">Qué alimenta</span>
+            <ul>
+              <li>Luces LED, laptop y carga de teléfonos</li>
+              <li>Ventiladores de techo y bomba de agua</li>
+              <li>Nevera de compresor de 12 V y TV</li>
+              <li>Ráfagas cortas de microondas o cafetera</li>
+            </ul>
+            <p style="margin-top:12px"><strong>Lo que NO mueve:</strong> el aire acondicionado ni la calefacción eléctrica. Y en invierno, con días cortos y nieve sobre los paneles, la producción cae casi a cero: hay que presupuestar un generador pequeño ($500–$1.500) o enchufarse de vez en cuando.</p>
+            <p><strong>¿Y la eólica?</strong> La investigación no encontró datos verificables de precios ni rendimiento de turbinas eólicas pequeñas para RV en Canadá, así que queda como pregunta abierta. El solar, en cambio, está verificado y cumple lo que promete en 3 estaciones.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="invierno">
+        <div class="rule"></div>
+        <h2>El invierno en Ontario: la parte dura</h2>
+        <p class="sub">Se puede vivir en un RV todo el invierno — hay quien lleva 15 años haciéndolo — pero es caro y exigente. Este es el número honesto que casi nadie pone en los videos.</p>
+        <div class="split">
+          <div class="panel">
+            <img src="assets/img9.jpg" alt="Motorhome Clase C circulando por una carretera nevada entre pinos en Canadá" />
+            <span class="tag warn">Dic – feb</span>
+            <div class="big-num">+$400–$600 / mes</div>
+            <p>Sobre el presupuesto de verano. Solo el propano de la calefacción puede costar <strong>$300–$450/mes</strong> en frío profundo (un tanque de 30 lb cada dos días cuando la temperatura anda por los −12 °C o menos). Y puede salir más caro calentar un motorhome que rentar un departamento.</p>
+          </div>
+          <div class="panel">
+            <h3>Lo que exige el frío</h3>
+            <ul>
+              <li>Las tuberías, tanques y válvulas de descarga se congelan; las paredes delgadas condensan humedad y crean moho.</li>
+              <li>A −30 °C, la calefacción de un RV apenas da abasto.</li>
+              <li>Equipo de invierno (pago único): faldón aislante, manguera calefactada, cinta térmica, deshumidificador: <strong>$500–$1.000</strong>.</li>
+              <li>Un calefactor de aire diésel (tipo Espar/Webasto, $200–$1.500 instalado) ahorra ~$300/mes en los meses peores.</li>
+              <li>Alternativa con enchufes: camping de invierno con servicios, <strong>~$800–$1.200/mes</strong>.</li>
+            </ul>
+            <p><strong>La jugada económica:</strong> pasar el invierno como «snowbird» en tierras BLM del sur de EE. UU., donde la pernocta sigue siendo gratis.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="ocultos">
+        <div class="rule"></div>
+        <h2>Los costos ocultos que casi nadie cuenta</h2>
+        <p class="sub">El precio de compra engaña. Esto es lo que decide si la vida en carretera sale barata o cara de verdad:</p>
+        <ol class="hidden-list">
+          <li><strong>El vehículo remolcador.</strong> El costo escondido mayor de tráileres y quintas ruedas: otro vehículo que comprar, asegurar, mantener y alimentar a diario.</li>
+          <li><strong>Las llantas caducan por edad,</strong> no por desgaste: se cambian cada 5–7 años y cuestan $2.000–$7.000 el juego (el juego completo de una Clase A, $6.000–$7.000).</li>
+          <li><strong>El daño por agua</strong> es el asesino nº 1 de los RV de 20–30 años: un tráiler «barato» de $5.000 puede esconder más de $5.000 en pudrición.</li>
+          <li><strong>La calefacción de invierno:</strong> $300–$450/mes en propano dic–feb, o un camping pagado forzoso.</li>
+          <li><strong>El diésel se mueve:</strong> en Ontario rondaba los $2,60/L en oct-2026; el presupuesto de un vehículo sediento varía cientos de dólares.</li>
+          <li><strong>La pernocta «gratis» cuesta:</strong> gasolina para llegar a sitios legales + ~$40/mes en descarga, agua y lavandería.</li>
+          <li><strong>El seguro de motorhome en Ontario es alto,</strong> y la póliza de tiempo completo cuesta más que la recreativa.</li>
+          <li><strong>El generador hace falta</strong> cuando el solar no alcanza (invierno, semanas nubladas): $500–$1.500 más combustible.</li>
+          <li><strong>El «impuesto climático» canadiense:</strong> la sal de las carreteras y el ciclo hielo-deshielo destruyen sellos y chasis; hay que resellar seguido.</li>
+          <li><strong>Las reparaciones llegan en bloque:</strong> una nevera ($1.500), resellar el techo ($1.000–$3.000) o una transmisión pueden costar meses de «ahorro» frente a la renta.</li>
+        </ol>
+      </section>
+
+      <section id="notas">
+        <div class="rule"></div>
+        <h2>Notas honestas sobre estos números</h2>
+        <div class="caveats">
+          <ul>
+            <li>Los precios de compra salen de avisos reales (Kijiji, AutoTrader) leídos en el índice web entre el 8 y el 16 de octubre de 2026: son rangos indicativos, no cotizaciones de un aviso vigente hoy.</li>
+            <li>El precio del kit solar (~$1.029,99 CAD) está verificado en el índice web (Amazon.ca no dejó verificarlo en vivo por un muro antibots), y confirmado por eco-worthy.com y una guía DIY reciente.</li>
+            <li>Los seguros son rangos publicados por corredores de Ontario; la cotización real varía mucho según historial del conductor, valor del vehículo y uso de tiempo completo. Antes de cerrar un presupuesto, pide una cotización real.</li>
+            <li>El modelo supone compra al contado. Financiar un vehículo de $15.000 a tasas típicas de préstamo RV sumaría ~$250–$350/mes y cambiaría el orden del ranking.</li>
+            <li>El modelo de la Clase B usa ~14 L/100 km, el punto medio del rango típico (12–17 L/100 km).</li>
+          </ul>
+        </div>
+        <h3 style="margin-top:28px">Fuentes</h3>
+        <ul class="sources">
+          <li>Guía de costos de vida a tiempo completo en RV (Canadá): <a href="https://www.vatrerpower.com/en-ca/blogs/news/the-cost-breakdown-of-living-full-time-in-an-rv">vatrerpower.com</a></li>
+          <li>Avisos usados Clase B: <a href="https://www.autotrader.ca/rv/lst/reg_ab/cit_cochrane/bt_class-b-motorhome-camper-van">AutoTrader (Cochrane)</a> · <a href="https://www.autotrader.ca/rv/lst/volkswagen/reg_qc/cit_montreal/bt_class-b-motorhome-camper-van">AutoTrader (Montreal)</a> · <a href="https://www.autotrader.ca/rv/lst/roadtrek/reg_on/cit_brampton/bt_class-b-motorhome-camper-van">AutoTrader (Brampton)</a></li>
+          <li>Avisos usados Clase C: <a href="https://www.kijiji.ca/b-rv-motorhome/ontario/class-c-motorhome/k0c333l9004?address=Toronto%2C">Kijiji Ontario</a> · <a href="https://www.auto123.com/en/used-cars/all-inventories/british-columbia/all-cities/2016/all-makes/all-models/class-c-motorhome/dealers/?list=provinces">Auto123</a></li>
+          <li>Avisos usados Clase A: <a href="https://www.kijiji.ca/b-rv-camper-trailer/ontario/motorhome/k0c172l9004?ll=43.1%2C-79.28&radius=150.0">Kijiji Ontario</a></li>
+          <li>Precios de tráileres usados: <a href="https://corude.com/en/articles/essential-tips-for-buying-a-used-travel-trailer">Corude (guía, actualizada ene-2026)</a> · <a href="https://www.rvhotlinecanada.com/rv-listings/travel-trailer/?page=125">RV Hotline Canada</a></li>
+          <li>Precios de campers de camioneta: <a href="https://www.kijiji.ca/b-ontario/truck-camper-by-owner/k0l9004">Kijiji Ontario</a> · <a href="https://www.rvliquidators.ca/product/truck-camper?s=true&condition=1">RV Liquidators</a></li>
+          <li>Precios de quinta rueda: <a href="https://www.kijiji.ca/b-ontario/fifth-wheel-camper/k0l9004">Kijiji Ontario</a></li>
+          <li>Consumo de combustible por clase: <a href="https://www.rvtrader.com/blog/2025/08/15/calculating-your-fuel-cost-for-an-rv-road-trip/">RV Trader</a> · <a href="https://www.mortonsonthemove.com/rv-gas-mileage/">Mortons on the Move</a></li>
+          <li>Precios de gasolina en Ontario (16-oct-2026): <a href="https://cheapgastoronto.ca/cheapest-gas-prices-toronto">Cheap Gas Toronto</a></li>
+          <li>Seguros RV en Ontario: <a href="https://www.mcleananddickey.com/rv-and-motorhome-insurance/">McLean &amp; Dickey</a> · <a href="https://www.ratehub.ca/blog/everything-you-need-to-know-about-rv-insurance/">Ratehub</a></li>
+          <li>Presupuestos de mantención de tiempo completo: <a href="https://www.irv2.com/threads/budget-for-rving-in-2026.2180079/page-2">iRV2 (foro)</a></li>
+          <li>Vida invernal en RV: <a href="https://www.mortonsonthemove.com/winter-rv-living/">Mortons on the Move</a> · <a href="https://www.rvforum.net/threads/motorhome-winter-capable.911895/">RV Forum</a></li>
+          <li>Reglas de tierras de la Corona: <a href="https://ca.jackery.com/blogs/lifestyle/guide-to-crown-land-camping-in-ontario">Jackery Canadá</a> · <a href="https://northernstay.com/free-camping-canada">NorthernStay</a></li>
+          <li>Política de pernocta en Walmart: <a href="https://blog.truckerguideapp.com/post/everything-to-know-about-overnight-parking-policies-at-walmart-this-year">Trucker Guide</a></li>
+          <li>Reglas de acampada dispersa BLM: <a href="https://www.swervia.com/destinations/blm-camping-a-complete-beginners-guide-to-free-public-land-in-the-us">Swervia</a></li>
+          <li>Guía de iOverlander: <a href="https://blog.indiecampers.com/how-to-use-ioverlander-guide/">Indie Campers</a></li>
+          <li>Kits solares y precios: <a href="https://www.amazon.ca/dp/B0D21Z3GCK/ref=cm_sw_r_cso_fm_apin_dp_S37J9MMYNRN4RW41PPYR_1">Amazon.ca (kit ECO-WORTHY)</a> · <a href="https://activistpost.com/cheap-off-grid-power-real-solar-setups-under-1000/">Activist Post (montajes solares económicos)</a></li>
+        </ul>
+      </section>
+    </main>
+
+    <footer class="wrap">
+      Comparativa preparada el 16 de octubre de 2026 con datos de mercado canadiense. Todos los valores en dólares canadienses (CAD) y estimados: tu gasto real dependerá del vehículo concreto, tu historial de seguro y cuánto te muevas.
+    </footer>
+
+    <script>
+      var OPTIONS = [
+        { id: "b",  name: "Camper van (Clase B)", fuelPer100: 14, fuelPrice: 1.75, fuelLabel: "Gasolina", insurance: 100, maint: 150, base: 585 },
+        { id: "tc", name: "Camper de camioneta",  fuelPer100: 18, fuelPrice: 1.75, fuelLabel: "Gasolina", insurance: 175, maint: 165, base: 730 },
+        { id: "c",  name: "Motorhome Clase C",    fuelPer100: 22, fuelPrice: 1.75, fuelLabel: "Gasolina", insurance: 125, maint: 200, base: 775 },
+        { id: "tt", name: "Tráiler de viaje",      fuelPer100: 20, fuelPrice: 1.75, fuelLabel: "Gasolina", insurance: 183, maint: 200, base: 800 },
+        { id: "a",  name: "Motorhome Clase A",    fuelPer100: 30, fuelPrice: 1.75, fuelLabel: "Gasolina", insurance: 165, maint: 300, base: 1025 },
+        { id: "fw", name: "Quinta rueda",         fuelPer100: 24, fuelPrice: 2.60, fuelLabel: "Diésel",   insurance: 233, maint: 250, base: 1125 }
+      ];
+      var FIXED = 140; // propano 40 + teléfono/internet 60 + lavandería/descarga/agua 40
+      var WINTER_EXTRA = 500; // punto medio del rango +$400–$600 (dic–feb)
+      var current = OPTIONS[0];
+
+      var optRow = document.getElementById("optRow");
+      OPTIONS.forEach(function (o) {
+        var b = document.createElement("button");
+        b.type = "button";
+        b.className = "opt-btn";
+        b.textContent = o.name;
+        b.setAttribute("aria-pressed", o === current ? "true" : "false");
+        b.addEventListener("click", function () {
+          current = o;
+          var btns = optRow.querySelectorAll(".opt-btn");
+          for (var i = 0; i < btns.length; i++) btns[i].setAttribute("aria-pressed", "false");
+          b.setAttribute("aria-pressed", "true");
+          render();
+        });
+        optRow.appendChild(b);
+      });
+
+      function fmt(n) {
+        return "$" + Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      }
+
+      function render() {
+        var km = parseInt(document.getElementById("km").value, 10);
+        var winter = document.getElementById("winter").checked;
+        document.getElementById("kmOut").textContent = km.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " km";
+        var fuel = km * current.fuelPer100 / 100 * current.fuelPrice;
+        var fuel800 = 800 * current.fuelPer100 / 100 * current.fuelPrice;
+        // Anchor to the report's published totals at 800 km/month; only the fuel delta moves the total.
+        var total = current.base + (fuel - fuel800) + (winter ? WINTER_EXTRA : 0);
+        document.getElementById("calcTotal").textContent = "~" + fmt(total);
+        document.getElementById("calcName").textContent = current.name;
+        var lines = [
+          [current.fuelLabel + " (" + current.fuelPer100 + " L/100 km)", fmt(fuel)],
+          ["Seguro", fmt(current.insurance)],
+          ["Fondo de mantención", fmt(current.maint)],
+          ["Propano + teléfono + lavandería/descarga", fmt(FIXED)]
+        ];
+        if (winter) lines.push(["Extra de invierno (calefacción y sitios con enchufe)", fmt(WINTER_EXTRA)]);
+        var html = "";
+        lines.forEach(function (l) { html += "<li><span>" + l[0] + "</span><span>" + l[1] + "</span></li>"; });
+        document.getElementById("calcLines").innerHTML = html;
+      }
+
+      document.getElementById("km").addEventListener("input", render);
+      document.getElementById("winter").addEventListener("change", render);
+      render();
+    </script>
+  </body>
+</html>

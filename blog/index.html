@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="description" content="Blog personal de Hernán: investigaciones y comparativas con datos, costos y conclusiones claras." />
+    <link rel="icon" href="data:," />
+    <title>El blog de Hernán — Investigaciones y comparativas</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #f7f5f0;
+        --surface: #ffffff;
+        --ink: #1e2420;
+        --ink-soft: #4b554e;
+        --line: #dcd8cc;
+        --accent: #1f5c3d;
+        --accent-ink: #ffffff;
+        --chip-bg: #e7efe9;
+        --chip-ink: #1f5c3d;
+        --shadow: 0 1px 2px rgba(30, 36, 32, 0.06), 0 8px 24px rgba(30, 36, 32, 0.07);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #131715;
+          --surface: #1c211e;
+          --ink: #eef1ec;
+          --ink-soft: #aeb8b0;
+          --line: #333b36;
+          --accent: #7cc79b;
+          --accent-ink: #10231a;
+          --chip-bg: #233029;
+          --chip-ink: #9fd8b6;
+          --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.35);
+        }
+      }
+
+      * { box-sizing: border-box; }
+      html { -webkit-text-size-adjust: 100%; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+        font-size: 18px;
+        line-height: 1.6;
+      }
+      a { color: var(--accent); }
+
+      .wrap {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 0 20px 64px;
+      }
+
+      /* ---------- Encabezado ---------- */
+      header.intro { padding: 44px 0 8px; }
+      header.intro h1 {
+        margin: 0 0 10px;
+        font-size: clamp(2rem, 6vw, 2.9rem);
+        line-height: 1.12;
+        letter-spacing: -0.01em;
+        font-weight: 700;
+      }
+      header.intro p.lede {
+        margin: 0;
+        max-width: 34em;
+        font-size: 1.13rem;
+        color: var(--ink-soft);
+      }
+
+      figure.portada {
+        margin: 30px 0 8px;
+      }
+      figure.portada img {
+        display: block;
+        width: 100%;
+        height: auto;
+        aspect-ratio: 16 / 9;
+        object-fit: cover;
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+      }
+      figure.portada figcaption {
+        margin-top: 8px;
+        font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+        font-size: 0.78rem;
+        color: var(--ink-soft);
+      }
+
+      /* ---------- Lista de artículos ---------- */
+      section.articulos { margin-top: 40px; }
+      section.articulos > h2 {
+        margin: 0 0 4px;
+        font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+      }
+      section.articulos > p.nota {
+        margin: 0 0 22px;
+        font-size: 0.98rem;
+        color: var(--ink-soft);
+      }
+
+      ul.lista {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 18px;
+      }
+      li.tarjeta {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+      li.tarjeta a.bloque {
+        display: block;
+        padding: 26px 26px 24px;
+        text-decoration: none;
+        color: inherit;
+      }
+      li.tarjeta a.bloque:hover h3,
+      li.tarjeta a.bloque:focus-visible h3 { color: var(--accent); }
+      li.tarjeta a.bloque:focus-visible {
+        outline: 3px solid var(--accent);
+        outline-offset: -3px;
+      }
+      .meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+        font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+        font-size: 0.82rem;
+        color: var(--ink-soft);
+      }
+      .meta time { font-variant-numeric: tabular-nums; }
+      .meta .tema {
+        background: var(--chip-bg);
+        color: var(--chip-ink);
+        border-radius: 999px;
+        padding: 2px 10px;
+        font-weight: 600;
+        font-size: 0.78rem;
+      }
+      li.tarjeta h3 {
+        margin: 0 0 8px;
+        font-size: 1.5rem;
+        line-height: 1.25;
+        transition: color 0.15s ease;
+      }
+      li.tarjeta p.desc {
+        margin: 0 0 16px;
+        color: var(--ink-soft);
+        font-size: 1.02rem;
+      }
+      .leer {
+        font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+        font-size: 0.92rem;
+        font-weight: 700;
+        color: var(--accent);
+      }
+      .leer .flecha { display: inline-block; transition: transform 0.15s ease; }
+      li.tarjeta a.bloque:hover .leer .flecha { transform: translateX(4px); }
+
+      /* ---------- Pie ---------- */
+      footer {
+        margin-top: 52px;
+        padding-top: 20px;
+        border-top: 1px solid var(--line);
+        font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+        font-size: 0.85rem;
+        color: var(--ink-soft);
+      }
+      footer p { margin: 0 0 6px; }
+
+      @media (max-width: 520px) {
+        body { font-size: 17px; }
+        header.intro { padding-top: 32px; }
+        li.tarjeta a.bloque { padding: 22px 20px 20px; }
+        li.tarjeta h3 { font-size: 1.32rem; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+
+      <header class="intro">
+        <h1>El blog de Hernán</h1>
+        <p class="lede">
+          Aquí publico mis investigaciones y comparativas: temas que estudio a fondo
+          antes de decidir, con los datos, los costos y las conclusiones claras.
+          Sin relleno — solo lo que de verdad sirve para tomar una decisión.
+        </p>
+      </header>
+
+      <figure class="portada">
+        <img src="assets/cover1.jpg" width="1680" height="1053"
+             alt="Un motorhome recorre una carretera entre bosques de pinos con las montañas Rocosas de Canadá al fondo" />
+        <figcaption>Foto de portada: Jessica Outside, vía Steemit.</figcaption>
+      </figure>
+
+      <section class="articulos" aria-labelledby="titulo-articulos">
+        <h2 id="titulo-articulos">Artículos</h2>
+        <p class="nota">Por ahora hay uno publicado. Iré sumando cada investigación nueva a esta lista.</p>
+
+        <ul class="lista">
+          <li class="tarjeta">
+            <a class="bloque" href="vivir-en-carretera.html">
+              <div class="meta">
+                <time datetime="2026-10-16">16 de octubre de 2026</time>
+                <span class="tema">Vida en carretera</span>
+              </div>
+              <h3>Vivir en carretera: comparativa de costos</h3>
+              <p class="desc">
+                Las formas más baratas de vivir viajando en Canadá — camper van, motorhome,
+                tráiler, truck camper y fifth wheel — comparadas por costo mensual,
+                estacionamiento gratis, energía solar y el reto del invierno.
+              </p>
+              <span class="leer">Leer el artículo <span class="flecha" aria-hidden="true">→</span></span>
+            </a>
+          </li>
+        </ul>
+      </section>
+
+      <footer>
+        <p>Blog personal de Hernán · Hamilton, Ontario, Canadá.</p>
+        <p>Cada artículo enlaza a su archivo propio, así que puedes compartir el que quieras por separado.</p>
+      </footer>
+
+    </div>
+  </body>
+</html>
